@@ -30,6 +30,8 @@
 #define COL(x) ((x)%E)
 #define NUM(i, j) ((i)*E + (j))
 
+#define MAX_DEPTH 3
+
 // start position
 int start_pos[ES] = {
     X, X, X, X, X, X, X, X, X, X,
@@ -44,34 +46,47 @@ int start_pos[ES] = {
     X, X, X, X, X, X, X, X, X, X
 };
 
-static char cell_name(int arg)
+#define LOG_ERR(...) fprintf(stderr, __VA_ARGS__)
+#define LOG_INFO(...) printf(__VA_ARGS__)
+
+#define DIE(...) LOG_ERR(__VA_ARGS__); exit(EXIT_FAILURE);
+
+#define FOR(i, n) for(int (i) = 0; (i) < (n); ++(i))
+
+static char pos_name(int pos)
 {
-    if (arg == W) {
+    if (pos == W) {
         return 'W';
     }
-    if (arg == B) {
+    if (pos == B) {
         return 'B';
     }
-    if (arg == X) {
+    if (pos == X) {
         return 'X';
     }
-    if (arg == C) {
+    if (pos == C) {
         return 'C';
     }
+
+    DIE("unexpected position: %d", pos);
 }
 
 void display_pos(int pos[ES])
 {
-    for (int i = 0; i < E; ++i) {
+
+    FOR(i, E)
+    {
         printf("\n");
-        for (int j = 0; j < E; ++j) {
-            printf("%c ", cell_name(pos[NUM(i, j)]));
+
+        FOR(j, E)
+        {
+            printf("%c ", pos_name(pos[NUM(i, j)]));
         }
     }
 }
 
 int main(int argc, char** argv)
-{    
+{
     display_pos(start_pos);
     return (EXIT_SUCCESS);
 }
